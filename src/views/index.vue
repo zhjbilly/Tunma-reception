@@ -49,7 +49,7 @@
         >
           <el-card>
             <h4>{{ item.mingcheng }}</h4>
-            <p>状态：{{ item.zhuangtai === 'jieyue' ? '借阅' : '归还' }}</p>
+            <p>状态：{{ item.zhuangtai === 'returned' ? '借阅' : '归还' }}</p>
             <p>类型：<el-tag :type="getJieyueType(item.jieyueleixing)" size="small">{{ formatJieyueLeixing(item.jieyueleixing) }}</el-tag></p>
           </el-card>
         </el-timeline-item>
@@ -104,25 +104,25 @@ const getDengjiType = (dengji) => {
 // 格式化借阅类型显示
 const formatJieyueLeixing = (leixing) => {
   switch(leixing) {
-    case 'guanjijiaoliu':
+    case 'communicate':
       return '馆际交流'
-    case 'songcangxiaxiang':
+    case 'go_country':
       return '送藏下乡'
-    case 'wenhuajinxiaoyuan':
+    case 'school':
       return '文化进校园'
     default:
-      return leixing
+      return '其他'
   }
 }
 
 // 根据借阅类型返回对应的标签类型
 const getJieyueType = (leixing) => {
   switch(leixing) {
-    case 'guanjijiaoliu':
+    case 'communicate':
       return 'success'
-    case 'songcangxiaxiang':
+    case 'go_country':
       return 'warning'
-    case 'wenhuajinxiaoyuan':
+    case 'school':
       return 'info'
     default:
       return ''
@@ -198,7 +198,8 @@ const filteredCollectionList = computed(() => {
 // 过滤当前藏品的流动记录
 const filteredFlowList = computed(() => {
   if (!selectedCollection.value) return []
-  return liudongList.value.filter(item => item.cangpinId === selectedCollection.value.id)
+  debugger
+  return liudongList.value.filter(item => item.cangpinId === selectedCollection.value.id && item.zhuangtai !== 'pending_approval')
 })
 
 // 处理藏品点击

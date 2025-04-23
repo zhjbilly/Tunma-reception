@@ -68,13 +68,13 @@
             v-for="item in flowList"
             :key="item.id"
             :timestamp="item.createTime"
-            :type="item.zhuangtai === 'jieyue' ? 'success' : 'warning'"
+            :type="item.zhuangtai === 'returned' ? 'success' : 'warning'"
           >
             <el-card>
               <h4>{{ item.mingcheng }}</h4>
-              <p>状态：{{ item.zhuangtai === 'jieyue' ? '借阅' : '归还' }}</p>
+              <p>状态：{{ item.zhuangtai === 'returned' ? '归还' : '借阅' }}</p>
               <p>类型：<el-tag :type="getJieyueType(item.jieyueleixing)" size="small">{{ formatJieyueLeixing(item.jieyueleixing) }}</el-tag></p>
-              <p>备注：{{ item.beizhu }}</p>
+              <p>目的地：{{ item.dest }}</p>
             </el-card>
           </el-timeline-item>
         </el-timeline>
@@ -124,25 +124,25 @@ const getDengjiType = (dengji) => {
 // 格式化借阅类型显示
 const formatJieyueLeixing = (leixing) => {
   switch(leixing) {
-    case 'guanjijiaoliu':
+    case 'communicate':
       return '馆际交流'
-    case 'songcangxiaxiang':
+    case 'go_country':
       return '送藏下乡'
-    case 'wenhuajinxiaoyuan':
+    case 'school':
       return '文化进校园'
     default:
-      return leixing
+      return '其他'
   }
 }
 
 // 根据借阅类型返回对应的标签类型
 const getJieyueType = (leixing) => {
   switch(leixing) {
-    case 'guanjijiaoliu':
+    case 'communicate':
       return 'success'
-    case 'songcangxiaxiang':
+    case 'go_country':
       return 'warning'
-    case 'wenhuajinxiaoyuan':
+    case 'school':
       return 'info'
     default:
       return ''
@@ -172,7 +172,7 @@ const getFlowList = async () => {
     const res = await getLiudongList({
       pageNum: 1,
       pageSize: 100,
-      changpinId: route.params.id
+      cangpinId: route.params.id
     })
     if (res.code === 200) {
       flowList.value = res.rows
